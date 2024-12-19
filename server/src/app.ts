@@ -1,13 +1,14 @@
-import {Express, Router} from 'express';
-import {Server} from "socket.io";
-import {ObjectId} from "mongodb";
-import {User} from "./classes/User";
-import {Chat} from "./classes/Chats/Chat";
-import {Message} from "./classes/Message";
-import {GroupChat, GroupChatType} from "./classes/Chats/GroupChat";
+import { Express, Router } from 'express';
+import { Server } from "socket.io";
+import { ObjectId } from "mongodb";
+import { User } from "./classes/User";
+import { Chat } from "./classes/Chats/Chat";
+import { Message } from "./classes/Message";
+import { GroupChat, GroupChatType } from "./classes/Chats/GroupChat";
 
 const express = require('express');
-const config = require('config');
+const dotenv = require('dotenv');
+dotenv.config()
 const http = require('http');
 const cors = require('cors');
 const bodyParser = require("body-parser");
@@ -18,8 +19,8 @@ const userRoute: Router = require("./routes/user.routes");
 const messageRoute: Router = require("./routes/message.routes");
 const uploadRoute: Router = require("./routes/upload.routes")
 
-const app: Express = express()
-const port: string = config.get('Dev.programConfig.port');
+const app: Express = express();
+const port: string = process.env.PORT;
 const server: any = http.createServer(app);
 
 app.use(cors());
@@ -55,7 +56,7 @@ io.on("connection", (socket): void => {
     socket.on("send_message", (data): void => {
 
         Chat.sendMessage(data.chat_id, data.sender_id, data.text).then((): void => {
-                io.in(data.chat_id).emit("messages_changed")
+            io.in(data.chat_id).emit("messages_changed")
         }).catch(err => console.log(err.toString()))
 
     })
@@ -65,7 +66,7 @@ io.on("connection", (socket): void => {
         Message.setNewMessageText(data.message_id, data.text).then((): void => {
             io.in(data.chat_id).emit("messages_changed")
         })
-        .catch(err => console.log(err.toString()))
+            .catch(err => console.log(err.toString()))
 
     })
 
@@ -79,20 +80,20 @@ io.on("connection", (socket): void => {
 
     socket.on("add_contact", (data): void => {
 
-        User.findOneUser({phone_number: data.new_contact_number}).then(contact => {
+        User.findOneUser({ phone_number: data.new_contact_number }).then(contact => {
 
             if (contact) {
                 User.addNewContact(new ObjectId(data.user_id), contact._id).then((chat_id): void => {
-                        if (socket.id === data.socket_id) {
-                            socket.emit('new_contact', {error: false, chat_id: chat_id})
-                        }
+                    if (socket.id === data.socket_id) {
+                        socket.emit('new_contact', { error: false, chat_id: chat_id })
                     }
+                }
                 )
             }
             else {
 
                 if (socket.id === data.socket_id) {
-                    socket.emit('new_contact', {error: 'There are no users with such number!'})
+                    socket.emit('new_contact', { error: 'There are no users with such number!' })
                 }
             }
         }).catch(err => console.log(err))

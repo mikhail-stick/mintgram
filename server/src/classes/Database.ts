@@ -9,10 +9,14 @@ import {
     InsertOneResult
 } from 'mongodb';
 
-const config = require('config');
+const dotenv = require('dotenv');
+dotenv.config()
 
-const DB_URI = config.get('Dev.DB.uri');
-const DB_NAME = config.get('Dev.DB.name');
+const DB_URI = process.env.DB_URI;
+const DB_NAME = process.env.DB_NAME;
+
+console.log(DB_URI);
+
 
 const OPTIONS: MongoClientOptions = {
     ssl: true,
@@ -25,7 +29,7 @@ export class DB {
 
     public collection!: Collection;
     private client!: MongoClient;
-    private db !: Db;
+    private db!: Db;
 
 
     constructor(private collectionName: string) {
@@ -70,11 +74,11 @@ export class DB {
     }
 
     async findAndDeleteById(id: ObjectId): Promise<void> {
-        await this.collection.findOneAndDelete({"_id": id})
+        await this.collection.findOneAndDelete({ "_id": id })
     }
 
     async findAndUpdateById(id: ObjectId, newObject: object): Promise<void> {
-        await this.collection.updateOne({_id: id}, {$set: newObject})
+        await this.collection.updateOne({ _id: id }, { $set: newObject })
     }
 
     async updateMany(filter: object, update: object): Promise<void> {

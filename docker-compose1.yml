@@ -1,33 +1,11 @@
 version: "3.8"
 
 services:
-    server:
-        container_name: server_app
-        build: ./server
-        ports:
-            - 3001:3001
-        volumes:
-            - type: bind
-              source: ./server/src
-              target: /src
-              read_only: false
-
-    client:
-        container_name: client_app
-        build: ./client
-        ports:
-            - 3000:3000
-        volumes:
-            - type: bind
-              source: ./client/src
-              target: /src
-              read_only: false
-
     mongodb:
         image: mongo:6.0 # Укажите желаемую версию MongoDB
         container_name: mongodb-container
         ports:
-            - "27017:27017" # Проброс порта для подключения к MongoDB
+            - "27018:27017" # Проброс порта для подключения к MongoDB
         environment:
             MONGO_INITDB_ROOT_USERNAME: root # Имя пользователя администратора
             MONGO_INITDB_ROOT_PASSWORD: example # Пароль пользователя администратора

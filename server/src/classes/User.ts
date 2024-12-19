@@ -1,9 +1,9 @@
-import {Document, ObjectId, WithId} from "mongodb";
+import { Document, ObjectId, WithId } from "mongodb";
 
-import {DB, user_chats, user_contacts} from './Database';
-import {Profile} from "./Profile";
-import {SavedMessages} from "./Chats/SavedMessages";
-import {PrivateChat} from "./Chats/PrivateChat";
+import { DB, user_chats, user_contacts } from './Database';
+import { Profile } from "./Profile";
+import { SavedMessages } from "./Chats/SavedMessages";
+import { PrivateChat } from "./Chats/PrivateChat";
 
 
 export interface UserType {
@@ -17,9 +17,11 @@ export interface UserType {
 export class User {
 
     static readonly usersDb: DB = new DB('users');
-    
+
 
     static async addUser(username: string, phone_number: string, password: string): Promise<any> {
+
+        console.log("lolka1");
 
         const user_id: ObjectId = await this.usersDb.insertOne(
             {
@@ -29,6 +31,8 @@ export class User {
                 profile_id: await Profile.addProfile()
             }
         )
+        console.log("lolka");
+
 
         await SavedMessages.createSavedMessages(user_id);
 
@@ -40,15 +44,15 @@ export class User {
     }
 
     static async findOneUserById(user_id: string): Promise<any> {
-        return await User.usersDb.findOne({_id: new ObjectId(user_id)});
+        return await User.usersDb.findOne({ _id: new ObjectId(user_id) });
     }
 
     static async getUsername(user_id: string): Promise<any> {
-        return (await User.usersDb.findOne({_id: new ObjectId(user_id.toString())})).username;
+        return (await User.usersDb.findOne({ _id: new ObjectId(user_id.toString()) })).username;
     }
 
     static async getProfileImage(user_id: string): Promise<any> {
-        const profile_id = (await User.usersDb.findOne({_id: new ObjectId(user_id.toString())})).profile_id;
+        const profile_id = (await User.usersDb.findOne({ _id: new ObjectId(user_id.toString()) })).profile_id;
         return await Profile.getImage(profile_id);
     }
 
@@ -61,7 +65,7 @@ export class User {
     }
 
     static async addNewChat(user_id: ObjectId, chat_id: ObjectId): Promise<void> {
-        await user_chats.insertOne({user_id: user_id, chat_id: chat_id})
+        await user_chats.insertOne({ user_id: user_id, chat_id: chat_id })
     }
 
     static async addNewContact(user_id: ObjectId | string, contact_id: ObjectId | string): Promise<string> {
@@ -80,11 +84,11 @@ export class User {
     }
 
     static async getAllUserChatsIds(user_id: string | ObjectId): Promise<WithId<Document>[]> {
-        return await user_chats.findAll({user_id: new ObjectId(user_id.toString())})
+        return await user_chats.findAll({ user_id: new ObjectId(user_id.toString()) })
     }
 
     static async getAllUserContacts(user_id: string): Promise<WithId<Document>[]> {
-        return await user_contacts.findAll({user_id: new ObjectId(user_id)})
+        return await user_contacts.findAll({ user_id: new ObjectId(user_id) })
     }
 
     static async getAllUserChats(user_id: string): Promise<Document> {
@@ -99,8 +103,8 @@ export class User {
                     as: "chat"
                 }
             },
-            {$match: {user_id: new ObjectId(user_id)}},
-            {$unwind: "$chat"},
+            { $match: { user_id: new ObjectId(user_id) } },
+            { $unwind: "$chat" },
             {
                 $group: {
                     _id: "$user_id",
@@ -109,7 +113,7 @@ export class User {
                     }
                 }
             },
-            {$project: {_id: 0, chats: 1}}
+            { $project: { _id: 0, chats: 1 } }
         ]);
     }
 
