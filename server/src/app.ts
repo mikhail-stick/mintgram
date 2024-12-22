@@ -32,6 +32,9 @@ app.use("/api/user", userRoute);
 app.use("/api/message", messageRoute);
 app.use("/api/upload", uploadRoute);
 
+const expressOasGenerator = require('express-oas-generator');
+
+expressOasGenerator.init(app, {});
 
 const io: Server = new Server(server, {
     cors: {

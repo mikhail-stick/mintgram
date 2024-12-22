@@ -20,9 +20,6 @@ export class User {
 
 
     static async addUser(username: string, phone_number: string, password: string): Promise<any> {
-
-        console.log("lolka1");
-
         const user_id: ObjectId = await this.usersDb.insertOne(
             {
                 username: username,
@@ -31,8 +28,6 @@ export class User {
                 profile_id: await Profile.addProfile()
             }
         )
-        console.log("lolka");
-
 
         await SavedMessages.createSavedMessages(user_id);
 

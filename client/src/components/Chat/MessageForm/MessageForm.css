@@ -100,3 +100,31 @@
     background-color: var(--send-button-color);
     color: white;
 }
+
+
+.nft-button {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    margin-left: 1rem;
+    padding-left: 0.125rem;
+    transition: 0.2s ease;
+}
+
+.nft-button:hover {
+    background-color: grey;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}

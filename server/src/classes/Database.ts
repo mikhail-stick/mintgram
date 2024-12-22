@@ -11,11 +11,13 @@ import {
 const dotenv = require('dotenv');
 dotenv.config()
 
+console.log(process.env.DB_URI);
+
 const DB_URI = process.env.DB_URI;
 const DB_NAME = process.env.DB_NAME;
 
 const CLIENT: MongoClient = new MongoClient(DB_URI);
-(async () => {await CLIENT.connect();})();
+(async () => { await CLIENT.connect(); })();
 
 
 export class DB {
