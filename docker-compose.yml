@@ -24,16 +24,16 @@ services:
               read_only: false
 
     mongodb:
-        image: mongo:6.0 # Укажите желаемую версию MongoDB
-        container_name: mongodb-container
+        image: mongo:6.0
+        container_name: mongodb
         ports:
-            - "27017:27017" # Проброс порта для подключения к MongoDB
+            - "27017:27017"
         environment:
-            MONGO_INITDB_ROOT_USERNAME: root # Имя пользователя администратора
-            MONGO_INITDB_ROOT_PASSWORD: example # Пароль пользователя администратора
-            MONGO_INITDB_DATABASE: mintgram # Название создаваемой базы данных
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+            MONGO_INITDB_DATABASE: mintgram
         volumes:
-            - mongodb_data:/data/db # Хранение данных в volume для их сохранения при перезапуске контейнера
+            - mongodb_data:/data/db
 
 volumes:
     mongodb_data:

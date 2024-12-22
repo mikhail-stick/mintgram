@@ -3,7 +3,6 @@ import {
     Collection,
     Db,
     ObjectId,
-    MongoClientOptions,
     WithId,
     Document,
     InsertOneResult
@@ -15,14 +14,8 @@ dotenv.config()
 const DB_URI = process.env.DB_URI;
 const DB_NAME = process.env.DB_NAME;
 
-console.log(DB_URI);
-
-
-const OPTIONS: MongoClientOptions = {
-    ssl: true,
-};
-
-const CLIENT: MongoClient = new MongoClient(DB_URI, OPTIONS);
+const CLIENT: MongoClient = new MongoClient(DB_URI);
+(async () => {await CLIENT.connect();})();
 
 
 export class DB {

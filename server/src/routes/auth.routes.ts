@@ -12,15 +12,15 @@ router.post("/register", async (req, res): Promise<void> => {
     try {
         console.log("lol0");
 
-        // // check if user with such phone number or username exists
-        // if (await User.findOneUser({ phone_number: req.body.phone_number })) {
-        //     res.status(404).json("User with this phone number already exists!");
-        //     return;
-        // }
-        // if (await User.findOneUser({ username: req.body.username })) {
-        //     res.status(404).json("User with this username already exists!");
-        //     return;
-        // }
+        // check if user with such phone number or username exists
+        if (await User.findOneUser({ phone_number: req.body.phone_number })) {
+            res.status(404).json("User with this phone number already exists!");
+            return;
+        }
+        if (await User.findOneUser({ username: req.body.username })) {
+            res.status(404).json("User with this username already exists!");
+            return;
+        }
 
         // generate new password
         const salt = await bcrypt.genSalt(10);
